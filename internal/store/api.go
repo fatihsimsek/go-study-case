@@ -36,6 +36,7 @@ type response struct {
 	Data      interface{} `json:"data"`
 }
 
+//Get endpoint: get value for requested key
 func (res resource) Get(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Query().Get("key")
 	if key == "" {
@@ -51,6 +52,7 @@ func (res resource) Get(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Set endpoint: set key and value to in-memory
 func (res resource) Set(w http.ResponseWriter, r *http.Request) {
 	var req setRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -61,6 +63,7 @@ func (res resource) Set(w http.ResponseWriter, r *http.Request) {
 	util.JSON(w, http.StatusOK, response{IsSuccess: true})
 }
 
+//Flush endpoint: in-memory values to file
 func (res resource) Flush(w http.ResponseWriter, r *http.Request) {
 	res.service.Flush()
 	util.JSON(w, http.StatusOK, response{IsSuccess: true})
